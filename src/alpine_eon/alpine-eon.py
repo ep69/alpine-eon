@@ -136,6 +136,17 @@ def adjust(ctx):
         set_fan_speed(newspeed)
 
 
+@main.command(short_help="Power off")
+@click.pass_context
+def off(ctx):
+    bus = smbus.SMBus(1)
+
+    if ctx.obj["dryrun"]:
+        print(f"Dry run, would power off")
+    else:
+        bus.write_byte(0x1A, 0xFF)
+
+
 @main.command(short_help="Set fan speed (0-100)")
 @click.argument("speed", type=click.IntRange(min=0, max=100))
 @click.pass_context
